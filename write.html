@@ -86,14 +86,14 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="featured-image">Featured Image</label>
-                                <div class="image-upload-area">
-        <input type="file" id="featured-image" accept="image/*" hidden>
-        <button type="button" class="btn btn-outline" id="upload-btn">Upload Image</button>
-        <p class="form-hint">PNG, JPG, or GIF, max 2MB</p>
-        <img id="preview-img" style="display: none; max-width: 100%; margin-top: 10px;">
-    </div>
+                                <label class="form-label">Featured Image</label>                                <div class="image-upload-area">
+                                    <input type="file" id="featured-image" name="featuredImage" accept="image/*" hidden>
+                                    <button type="button" class="btn btn-outline" id="upload-btn">Upload Image</button>
+                                    <p class="form-hint">PNG, JPG, or GIF, max 2MB</p>
+                                    <img id="preview-img" style="display: none; max-width: 100%; margin-top: 10px;">
+                                </div>
                             </div>
+                            
 
                             <div class="form-group">
                                 <label>Content</label>
@@ -183,5 +183,62 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+       document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("article-form");
+  const featuredImageInput = document.getElementById("featured-image");
+  const previewImg = document.getElementById("preview-img");
+  const uploadBtn = document.getElementById("upload-btn");
+
+  // Show image preview
+  uploadBtn.addEventListener("click", () => {
+    featuredImageInput.click();
+  });
+
+  featuredImageInput.addEventListener("change", () => {
+    const file = featuredImageInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        previewImg.src = reader.result;
+        previewImg.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Publish button handler
+  document.getElementById("publish-button").addEventListener("click", async () => {
+    const formData = new FormData();
+    formData.append("title", document.getElementById("title").value);
+    formData.append("category", document.getElementById("category").value);
+    formData.append("excerpt", document.getElementById("excerpt").value);
+    formData.append("content", document.getElementById("content").value);
+    formData.append("tags", document.getElementById("tags").value);
+    
+    if (featuredImageInput.files.length > 0) {
+      formData.append("featuredImage", featuredImageInput.files[0]);
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/articles", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert("✅ Article published!");
+        window.location.href = "articles.html"; // Redirect to articles page
+      } else {
+        alert("❌ Error: " + result.error);
+      }
+    } catch (err) {
+      console.error("Upload failed", err);
+      alert("Something went wrong.");
+    }
+  });
+});
+    </script>
 </body>
 </html>

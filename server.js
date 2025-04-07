@@ -1,3 +1,4 @@
+console.log("Script.js is loaded correctly!");
 const express = require("express");
 const pool = require("./db");
 const bcrypt = require("bcrypt");
@@ -91,30 +92,45 @@ app.post("/upload", upload.single("featuredImage"), (req, res) => {
     res.json({ filePath: `/uploads/${req.file.filename}` });
 });
 
-app.use("/uploads", express.static("uploads"));
+
 
 
 app.post("/articles", upload.single("featuredImage"), async (req, res) => {
     const { title, category, excerpt, content, tags } = req.body;
     const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
+    console.log("📥 Received Article Submission:");
+    console.log("➡️ Title:", title);
+    console.log("➡️ Category:", category);
+    console.log("➡️ Content:", content);
+    console.log("➡️ Tags:", tags);
+    console.log("🖼️ Image File:", req.file);
+
     if (!title || !category || !content) {
+        console.log("❌ Missing required fields");
         return res.status(400).json({ error: "Title, category, and content are required" });
     }
 
     try {
         const query = `
             INSERT INTO articles (title, category, excerpt, content, tags, image_url)
-            VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
+            VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;
+        `;
         const values = [title, category, excerpt, content, tags, imageUrl];
         const result = await pool.query(query, values);
 
+        console.log("✅ Article saved:", result.rows[0]);
         res.json({ message: "Article saved successfully!", article: result.rows[0] });
     } catch (err) {
-        console.error("Error saving article:", err);
-        res.status(500).json({ error: "Server error" });
+        console.error("❌ Error saving article:", err);
+        res.status(500).json({ error: "Server error while saving article." });
     }
-});
+})
+
+// Serve uploaded images
+app.use("/uploads", express.static("uploads"));
+
+
 
 
 
