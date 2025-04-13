@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Articles - Ranga Av Rama</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main class="articles-page">
+    <div class="container">
+      <h1 class="page-title">Articles</h1>
+      <div class="articles-grid">
+        <% articles.forEach(article => { %>
+          <div class="article-card">
+            <img src="/uploads/<%= article.image_filename %>" alt="<%= article.title %>">
+            <div class="card-content">
+              <span class="category"><%= article.category %></span>
+              <h2><a href="/articles/<%= article.id %>"><%= article.title %></a></h2>
+              <p><%= article.excerpt %></p>
+              <a href="/articles/<%= article.id %>" class="read-more">Read More</a>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+  <script src="../script.js"></script>
+</body>
+</html>
