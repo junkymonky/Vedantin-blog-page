@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Loading...</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="site-container">
+        <header class="site-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <img src="../images/om.png" alt="Om Symbol" class="om-symbol">
+                        <h1>Ranga Av Rama</h1>
+                    </div>
+                    <nav class="main-nav">
+                        <a href="index.html" class="nav-link">Home</a>
+                        <a href="articles.html" class="nav-link active">Articles</a>
+                        <a href="write.html" class="nav-link">Write</a>
+                    </nav>
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                        <!-- icons here -->
+                    </button>
+                    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                        <!-- hamburger menu icon -->
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="article-detail-page">
+            <div class="container">
+                <div class="back-link">
+                    <a href="articles.html">
+                        <!-- back arrow SVG -->
+                        Back to Articles
+                    </a>
+                </div>
+
+                <article class="article-content">
+                    <div class="article-header">
+                        <div class="article-meta">
+                            <span class="article-category" id="category">Loading...</span>
+                            <span class="article-date" id="created_at">Loading...</span>
+                        </div>
+                        <h1 id="title">Loading...</h1>
+                        <p class="article-excerpt" id="excerpt">Loading...</p>
+                    </div>
+
+                    <div class="article-featured-image">
+                        <img id="image" src="" alt="Article Image">
+                    </div>
+                    
+                    <article class="article-content">
+                      <div class="article-header">
+                          <h1 id="title">Loading...</h1>
+                          <p class="article-excerpt" id="excerpt">Loading...</p>
+                      </div>
+                    <div class="article-body" id="content">
+                      
+                        <!-- Article content will be inserted here -->
+                    </div>
+
+                    <div class="article-share">
+                        <!-- share section as provided -->
+                    </div>
+                </article>
+
+                <div class="related-articles">
+                    <!-- related articles section unchanged -->
+                </div>
+            </div>
+        </main>
+
+        <footer class="site-footer">
+          <div class="container">
+              <div class="footer-content">
+                  <div class="footer-section">
+                      <h3>About</h3>
+                      <p>
+                          This blog is dedicated to spreading the knowledge of Vishishta Advaita and the teachings of Shri Ramanujacharya.
+                      </p>
+                  </div>
+                  <div class="footer-section">
+                      <h3>Quick Links</h3>
+                      <ul class="footer-links">
+                          <li><a href="index.html">Home</a></li>
+                          <li><a href="articles.html">Articles</a></li>
+                          <li><a href="write.html">Write</a></li>
+                      </ul>
+                  </div>
+                  <div class="footer-section">
+                      <h3>Connect</h3>
+                      <div class="social-links">
+                          <a href="#" aria-label="Facebook">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                              </svg>
+                          </a>
+                          <a href="#" aria-label="Twitter">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                  <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+                              </svg>
+                          </a>
+                          <a href="#" aria-label="Instagram">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                              </svg>
+                          </a>
+                      </div>
+                  </div>
+              </div>
+              <div class="footer-bottom">
+                  <p>&copy; <span id="current-year"></span> Ranga Av Rama. All rights reserved.</p>
+              </div>
+          </div>
+      </footer>
+  </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const articleId = urlParams.get("id");
+
+        fetch(`http://localhost:5000/api/article/${articleId}`)
+            .then(res => res.json())
+            .then(article => {
+                document.getElementById("title").textContent = article.title;
+                document.getElementById("page-title").textContent = `${article.title} - Ranga Av Rama`;
+                document.getElementById("category").textContent = article.category;
+                document.getElementById("image").src = article.image_url;
+                document.getElementById("excerpt").textContent = article.excerpt || "";
+                document.getElementById("content").innerHTML = article.content;
+                document.getElementById("created_at").textContent = new Date(article.created_at).toLocaleDateString();
+            })
+            .catch(err => {
+                console.error("Error fetching article:", err);
+            });
+
+            const currentYearElements = document.querySelectorAll('#current-year');
+    const currentYear = new Date().getFullYear();
+    
+    currentYearElements.forEach(element => {
+      element.textContent = currentYear;
+    });
+  
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('theme-toggle');
+    
+    // Check for saved theme preference or use system preference
+    const savedTheme = localStorage.getItem('theme');
+    
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+    
+    themeToggle.addEventListener('click', function() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+  
+    // Mobile menu toggle
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const mainNav = document.querySelector('.main-nav');
+    
+    if (mobileMenuToggle && mainNav) {
+      mobileMenuToggle.addEventListener('click', function() {
+        mainNav.classList.toggle('show');
+        mobileMenuToggle.classList.toggle('active');
+      });
+    }
+    </script>
+</body>
+</html>

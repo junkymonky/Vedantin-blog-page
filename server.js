@@ -148,23 +148,20 @@ app.get('/articles', async (req, res) => {
   
   // Fetch article by ID
 // Route to handle article details
-app.get('/article-detail/:id', async (req, res) => {
-    console.log('Fetching article with ID:', req.params.id);  // Debug log
+app.get('/api/article/:id', async (req, res) => {
     const articleId = req.params.id;
-  
     try {
       const result = await pool.query('SELECT * FROM articles WHERE id = $1', [articleId]);
-  
-      if (result.rows.length > 0) {
-        res.render('article-detail', { article: result.rows[0] });
-      } else {
-        res.status(404).send('Article not found');
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Article not found' });
       }
-    } catch (error) {
-      console.error('Error fetching article:', error);
-      res.status(500).send('Server Error');
+      res.json(result.rows[0]);
+    } catch (err) {
+      console.error('❌ Error fetching article:', err);
+      res.status(500).json({ error: 'Server error' });
     }
   });
+  
   
 
   
